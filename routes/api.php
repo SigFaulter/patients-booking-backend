@@ -1,9 +1,19 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
+use App\Models\Appointment;
+use App\Models\Availability;
+use App\Models\Doctor;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +31,34 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('/user', [UserController::class, 'getUser']);
-    Route::post('/user/update', [UserController::class, 'updateUser']);
-    Route::post('/user/delete', [UserController::class, 'deleteUser']);
+    Route::get('user', [UserController::class, 'getUser']);
+    Route::post('user/update', [UserController::class, 'updateUser']);
+    Route::post('user/delete', [UserController::class, 'deleteUser']);
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('appointments', [AppointmentController::class, 'index']);
+    Route::post('appointments', [AppointmentController::class, 'store']);
+    Route::put('appointments/{id}', [AppointmentController::class, 'update']);
+    Route::delete('appointments/{id}', [AppointmentController::class, 'destroy']);
+});
+
+// Availability
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('availability', [AvailabilityController::class, 'index']);
+    Route::post('availability', [AvailabilityController::class, 'store']);
+    Route::put('availability/{id}', [AvailabilityController::class, 'update']);
+    Route::delete('availability/{id}', [AvailabilityController::class, 'destroy']);
+});
+
+// Doctors
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('doctors', [DoctorController::class, 'index']);
+    Route::get('doctors/{id}', [DoctorController::class, 'show']);
+});
+
+// Patients
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('patients', [PatientController::class, 'index']);
+    Route::get('patients/{id}', [PatientController::class, 'show']);
 });
