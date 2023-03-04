@@ -34,8 +34,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User updated successfully',
-            'user' => $user
-        ]);
+        ], 201);
     }
 
     public function deleteUser()
@@ -43,8 +42,10 @@ class UserController extends Controller
         $user = Auth::user();
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully'])
-            ->withCookie(cookie('token', '', 1, null, null, false, true));
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully'
+        ], 200)->withCookie(cookie('token', '', 1, null, null, false, true));
     }
 }
 ?>

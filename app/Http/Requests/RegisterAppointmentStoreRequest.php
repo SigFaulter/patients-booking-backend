@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
-class RegisterUserRequest extends FormRequest
+class RegisterAppointmentStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +26,9 @@ class RegisterUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|between:5,255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|between:8,255'
+            'doctor_id' => 'required|exists:doctors,id',
+            'appointment_date' => 'required|date_format:Y-m-d',
+            'appointment_time' => 'required|date_format:H:i:s',
         ];
     }
 

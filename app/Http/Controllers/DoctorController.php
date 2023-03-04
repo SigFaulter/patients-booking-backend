@@ -21,32 +21,42 @@ class DoctorController extends Controller
 
     public function store(Request $request)
     {
-        $doctor = new Doctor;
-        $doctor->full_name = $request->full_name;
-        $doctor->phone_number = $request->phone_number;
-        $doctor->city = $request->city;
-        $doctor->user_id = $request->user_id;
+        $validated = $request->validated();
+
+        $doctor = new Doctor([
+            'full_name' => $validated['full_name'],
+            'phone_number' => $validated['phone_number'],
+            'city' => $validated['city'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password'])
+        ]);
+
         $doctor->save();
 
         return response()->json([
+            'success' => true,
             'message' => 'Doctor created successfully',
-            'doctor' => $doctor
-        ]);
+        ], 200);
     }
 
     public function update(Request $request, $id)
     {
+        $validated = $request->validated();
+
         $doctor = Doctor::find($id);
-        $doctor->full_name = $request->full_name;
-        $doctor->phone_number = $request->phone_number;
-        $doctor->city = $request->city;
-        $doctor->user_id = $request->user_id;
+
+        $doctor->full_name = $validated['full_name'];
+        $doctor->phone_number = $validated['phone_number'];
+        $doctor->city = $validated['city'];
+        $doctor->email = $validated['email'];
+
         $doctor->save();
 
         return response()->json([
+            'success' => true,
             'message' => 'Doctor updated successfully',
             'doctor' => $doctor
-        ]);
+        ], 200);
     }
 
     public function destroy($id)
@@ -55,7 +65,8 @@ class DoctorController extends Controller
         $doctor->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'Doctor deleted successfully'
-        ]);
+        ], 204);
     }
 }

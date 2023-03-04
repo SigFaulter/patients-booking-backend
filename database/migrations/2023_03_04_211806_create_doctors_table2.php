@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('phone_number');
             $table->string('city');
-            $table->string('specialization');
             $table->string('qualifications');
             $table->timestamps();
 

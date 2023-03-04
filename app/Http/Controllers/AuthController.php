@@ -24,7 +24,7 @@ class AuthController extends Controller
         ]);
 
         $user->save();
-        
+
         return response()->json([
             'message' => 'User created successfully!',
         ], 201);
@@ -33,7 +33,7 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request)
     {
         $validated = $request->validated();
-        
+
         $credentials = [
             'email' => $validated['email'],
             'password' => $validated['password']
@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'message' => 'User created successfully!'
+            'message' => 'Login successful!'
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Access-Control-Expose-Headers' => 'Authorization',
