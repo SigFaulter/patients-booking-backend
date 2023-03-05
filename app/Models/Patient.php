@@ -12,10 +12,15 @@ class Patient extends Authenticatable
 
     protected $fillable = [
         'full_name',
-        'email',
-        'password',
         'phone_number',
-        'id_card_number',
+        'id_card',
+        'birthday',
+        'age',
+        'medical_history',
+    ];
+
+    protected $dates = [
+        'birthday',
     ];
 
     protected $hidden = [

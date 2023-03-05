@@ -11,8 +11,12 @@ class Availability extends Model
 
     protected $fillable = [
         'doctor_id',
+        'start_time',
+        'end_time'
+    ];
+
+    protected $dates = [
         'available_date',
-        'available_time',
     ];
 
     public function doctor()

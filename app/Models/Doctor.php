@@ -14,8 +14,8 @@ class Doctor extends Authenticatable
         'full_name',
         'phone_number',
         'city',
-        'email',
-        'password',
+        'qualifications',
+        'patients_treated'
     ];
 
     protected $hidden = [

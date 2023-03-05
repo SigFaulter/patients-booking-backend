@@ -24,7 +24,7 @@ class PatientController extends Controller
             'password' => 'required|string|min:6',
             'phone_number' => 'required|string|max:15',
             'city' => 'required|string|max:255',
-            'national_id' => 'required|string|max:14|unique:patients',
+            'id_card' => 'required|string|max:14|unique:patients',
         ]);
 
         $patient = Patient::create($validatedData);
@@ -52,7 +52,7 @@ class PatientController extends Controller
             'password' => 'string|min:6',
             'phone_number' => 'string|max:15',
             'city' => 'string|max:255',
-            'national_id' => 'string|max:14|unique:patients,national_id,' . $id,
+            'id_card' => 'string|max:14|unique:patients,id_card,' . $id,
         ]);
 
         $patient = Patient::findOrFail($id);

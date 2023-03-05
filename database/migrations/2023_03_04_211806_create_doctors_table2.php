@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('doctor_id');
             $table->string('full_name');
             $table->string('phone_number');
             $table->string('city');
             $table->string('qualifications');
+            $table->integer('patients_treated')->unsigned()->default(0);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('doctor_id')->references('id')->on('users');
         });
 
     }

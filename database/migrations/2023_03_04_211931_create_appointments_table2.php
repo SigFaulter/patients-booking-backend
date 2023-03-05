@@ -19,6 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->date('appointment_date');
             $table->time('appointment_time');
+            $table->string('status');
+            $table->unsignedBigInteger('bill_amount');
+            $table->unsignedBigInteger('bill_status');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');
