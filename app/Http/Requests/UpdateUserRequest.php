@@ -3,9 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\BaseStoreRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-
 
 class UpdateUserRequest extends BaseStoreRequest
 {
