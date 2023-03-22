@@ -32,8 +32,5 @@ class RegisterDoctorStoreRequest extends BaseStoreRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
-    }
+
 }
