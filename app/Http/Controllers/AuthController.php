@@ -20,12 +20,14 @@ class AuthController extends Controller
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password'])
+            'password' => bcrypt($validated['password']),
+            'role' => 'patient'
         ]);
 
         $user->save();
 
         return response()->json([
+            'error' => false,
             'message' => 'User created successfully!',
         ], 201);
     }
@@ -41,28 +43,34 @@ class AuthController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid Credentials'], 401);
+                return response()->json(['error' => true, 'message' => 'Invalid Credentials'], 401);
             }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not create token'], 500);
+        } catch (JWTException) {
+            return response()->json(['error' => true, 'message' => 'Could not create token'], 500);
         }
 
+        $user = Auth::user();
+
         return response()->json([
-            'message' => 'Login successful!'
+            'error' => false,
+            'message' => 'Login successful!',
+            'role' => $user->role
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Access-Control-Expose-Headers' => 'Authorization',
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not invalidate token'], 500);
+            return response()->json(['error' => true,
+                'message' => 'Could not invalidate token'
+            ], 500);
         }
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['error' => false, 'message' => 'Successfully logged out']);
     }
 }

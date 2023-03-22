@@ -1,17 +1,11 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
-use App\Models\Appointment;
-use App\Models\Availability;
-use App\Models\Doctor;
-use App\Models\Patient;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
