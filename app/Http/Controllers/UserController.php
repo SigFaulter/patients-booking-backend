@@ -31,7 +31,7 @@ class UserController extends Controller
         }
 
         $user = new User([
-            'name' => $validated['name'],
+            'name' => $validated['full_name'],
             'email' => $validated['email'],
         ]);
 
@@ -49,8 +49,6 @@ class UserController extends Controller
         // TODO delete related records in patients table
         // $user->delete();
 
-        // TODO redirect user to logout to get out
-        // OR make the app do so
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully'

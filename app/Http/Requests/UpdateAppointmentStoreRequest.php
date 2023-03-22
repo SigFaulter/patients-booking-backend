@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseStoreRequest;
-class RegisterAppointmentStoreRequest extends BaseStoreRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,6 +12,7 @@ class RegisterAppointmentStoreRequest extends BaseStoreRequest
      */
     public function authorize()
     {
+        // You can add authorization logic here if needed
         return true;
     }
 
@@ -24,11 +25,9 @@ class RegisterAppointmentStoreRequest extends BaseStoreRequest
     {
         return [
             'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'required|exists:doctors,id',
-            'appointment_date' => 'required|date_format:Y-m-d',
-            'appointment_time' => 'required|date_format:H:i:s',
+            'doctor_id' => 'sometimes|nullable|exists:doctors,id',
+            'appointment_date' => 'sometimes|nullable|date',
+            'appointment_time' => 'sometimes|nullable|string'
         ];
     }
-
-
 }

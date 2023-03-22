@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Patient;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\RegisterUserRequest;
@@ -16,12 +17,20 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $user = new User([
-            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
 
         $user->save();
+
+        if ($validated['full_name']) {
+            $patient = new Patient([
+                'full_name' => $validated['full_name'],
+                'user_id' => $user->id,
+            ]);    
+            
+            $patient->save();
+        }
 
         return response()->json([
             'error' => false,

@@ -15,11 +15,11 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->date('birthday');
-            $table->integer('age');
-            $table->string('id_card')->unique();
+            $table->date('birthday')->nullable();
+            $table->integer('age')->nullable();
+            $table->string('id_card')->unique()->nullable();
             $table->text('medical_history')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->timestamps();
 
             $table->foreign('id')->references('id')->on('users');

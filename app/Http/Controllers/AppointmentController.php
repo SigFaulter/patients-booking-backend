@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Http\Requests\RegisterAppointmentStoreRequest;
+use Tymon\JWTAuth\JWT;
 
 class AppointmentController extends Controller
 {
@@ -24,10 +25,9 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
 
-        $user = Auth::user();
+        $user = auth()->user();
 
         $appointment = new Appointment([
-            'patient_id' => $user->id,
             'doctor_id' => $validated['doctor_id'],
             'appointment_date' => $validated['appointment_date'],
             'appointment_time' => $validated['appointment_time'],
@@ -43,10 +43,11 @@ class AppointmentController extends Controller
     public function update(Request $request, $id)
     {
         $appointment = Appointment::find($id);
-        $appointment->patient_id = $request->patient_id;
+
         $appointment->doctor_id = $request->doctor_id;
         $appointment->appointment_date = $request->appointment_date;
         $appointment->appointment_time = $request->appointment_time;
+
         $appointment->save();
 
         return response()->json([

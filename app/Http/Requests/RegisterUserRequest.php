@@ -24,7 +24,7 @@ class RegisterUserRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|between:5,255',
+            'full_name' => 'sometimes|string|between:5,255',
             'email' => 'required|email|unique:users',
             'password' => 'required|between:8,255'
         ];
