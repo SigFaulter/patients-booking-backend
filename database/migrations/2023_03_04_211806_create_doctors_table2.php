@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->string('full_name');
             $table->string('phone_number');
-            $table->string('city');
-            $table->string('qualifications');
+            $table->string('city')->nullable();
+            $table->string('qualifications')->nullable();
             $table->integer('patients_treated')->unsigned()->default(0);
             $table->timestamps();
 

@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('doctor_id')->unique();
             $table->date('appointment_date');
             $table->time('appointment_time');
-            $table->string('status');
-            $table->unsignedBigInteger('bill_amount');
-            $table->unsignedBigInteger('bill_status');
+            $table->string('status')->default('pending');
+            $table->unsignedBigInteger('bill_amount')->nullable();
+            $table->unsignedBigInteger('bill_status')->default('pending');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');
