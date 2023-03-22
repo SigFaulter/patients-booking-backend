@@ -49,12 +49,10 @@ class UserController extends Controller
         // TODO delete related records in patients table
         // $user->delete();
 
+        // TODO redirect user to logout
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully'
         ], 200)->withCookie(cookie('token', '', 1, null, null, false, true));
-
-        redirect('/home/dashboard');
     }
 }
-?>
