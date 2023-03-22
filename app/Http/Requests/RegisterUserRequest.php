@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseStoreRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 
-class RegisterUserRequest extends FormRequest
+class RegisterUserRequest extends BaseStoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
