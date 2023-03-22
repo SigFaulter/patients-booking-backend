@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -21,7 +19,6 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
-            'role' => 'patient'
         ]);
 
         $user->save();
@@ -41,12 +38,8 @@ class AuthController extends Controller
             'password' => $validated['password']
         ];
 
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => true, 'message' => 'Invalid Credentials'], 401);
-            }
-        } catch (JWTException) {
-            return response()->json(['error' => true, 'message' => 'Could not create token'], 500);
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => true, 'message' => 'Invalid Credentials'], 401);
         }
 
         $user = Auth::user();

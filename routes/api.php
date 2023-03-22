@@ -8,7 +8,6 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,37 +21,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('user', [UserController::class, 'getUser']);
-    Route::post('user/update', [UserController::class, 'updateUser']);
-    Route::post('user/delete', [UserController::class, 'deleteUser']);
+Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('appointments', [AppointmentController::class, 'index']);
-    Route::post('appointments', [AppointmentController::class, 'store']);
-    Route::put('appointments/{id}', [AppointmentController::class, 'update']);
-    Route::delete('appointments/{id}', [AppointmentController::class, 'destroy']);
+Route::middleware(['auth.role:admin,patient'])->group(function () {
+    Route::resource('users', UserController::class)->only(['index', 'update', 'destroy']);
+    Route::resource('appointments', AppointmentController::class)->except(['create', 'edit']);
 });
 
-// Availability
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('availability', [AvailabilityController::class, 'index']);
-    Route::post('availability', [AvailabilityController::class, 'store']);
-    Route::put('availability/{id}', [AvailabilityController::class, 'update']);
-    Route::delete('availability/{id}', [AvailabilityController::class, 'destroy']);
-});
-
-// Doctors
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('doctors', [DoctorController::class, 'index']);
-    Route::get('doctors/{id}', [DoctorController::class, 'show']);
-});
-
-// Patients
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('patients', [PatientController::class, 'index']);
-    Route::get('patients/{id}', [PatientController::class, 'show']);
+Route::middleware(['auth.role:admin,doctor'])->group(function () {
+    Route::resource('availability', AvailabilityController::class)->except(['create', 'edit']);
+    Route::resource('doctors', DoctorController::class)->only(['index', 'show']);
+    Route::resource('patients', PatientController::class)->only(['index', 'show']);
 });

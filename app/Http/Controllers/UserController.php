@@ -19,16 +19,22 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $id)
     {
-        $user = User::find($id);
+        // TODO make it update the patient details and user table at the same time
+        $validated = $request->validated();
+
+        $user = User::find($validated['id']);
         if (!$user) {
             return response()->json([
-                'success' => false,
+                'error' => true,
                 'message' => 'User not found'
             ], 404);
         }
 
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
+        $user = new User([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
         $user->save();
 
         return response()->json([
@@ -40,12 +46,15 @@ class UserController extends Controller
     public function deleteUser()
     {
         $user = Auth::user();
-        $user->delete();
+        // TODO delete related records in patients table
+        // $user->delete();
 
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully'
         ], 200)->withCookie(cookie('token', '', 1, null, null, false, true));
+
+        redirect('/home/dashboard');
     }
 }
 ?>
