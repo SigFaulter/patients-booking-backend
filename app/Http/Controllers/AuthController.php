@@ -33,7 +33,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'error' => 'false',
+            'error' => false,
             'message' => 'User created successfully!',
         ], 201);
     }
@@ -48,13 +48,13 @@ class AuthController extends Controller
         ];
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'true', 'message' => 'Invalid Credentials', 'role' => 'null'], 401);
+            return response()->json(['error' => 'true', 'message' => 'Invalid Credentials'], 401);
         }
 
         $user = Auth::user();
 
         return response()->json([
-            'error' => 'false',
+            'error' => false,
             'message' => 'Login successful!',
             'role' => $user->role
         ], 200)->withHeaders([
