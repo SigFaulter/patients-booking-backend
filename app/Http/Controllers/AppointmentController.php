@@ -2,22 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Http\Requests\RegisterAppointmentStoreRequest;
-use Tymon\JWTAuth\JWT;
+use App\Http\Requests\UpdateAppointmentStoreRequest;
 
 class AppointmentController extends Controller
 {
     public function index()
-    {
-        $appointments = Appointment::all();
+    {   
+        $user = auth()->user();
+        
+        if ($user->role === 'patient') {
+            $appointments = Appointment::where('patient_id', $user->id);
+        } else if ($user->role === 'admin') {
+            $appointments = Appointment::all();
+        }
+
+        if (!$appointments) {
+            return response()->json([
+                'error' => true,
+                'message' => 'No Appointments found',
+            ], 404);
+        }
+
         return response()->json($appointments);
     }
 
     public function show($id)
     {
-        $appointment = Appointment::find($id);
+        $user = auth()->user();
+
+        if ($user->role === 'patient') {
+            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id);
+        } else {
+            $appointment = Appointment::findOrFail($id);
+        }
+
+        if ($appointment === null) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Appointment not found',
+            ], 404);
+        }
+
         return response()->json($appointment);
     }
 
@@ -28,6 +55,7 @@ class AppointmentController extends Controller
         $user = auth()->user();
 
         $appointment = new Appointment([
+            'patient_id' => $user->id,
             'doctor_id' => $validated['doctor_id'],
             'appointment_date' => $validated['appointment_date'],
             'appointment_time' => $validated['appointment_time'],
@@ -40,13 +68,28 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAppointmentStoreRequest $request, $id)
     {
-        $appointment = Appointment::find($id);
+        $validated = $request->validated();
 
-        $appointment->doctor_id = $request->doctor_id;
-        $appointment->appointment_date = $request->appointment_date;
-        $appointment->appointment_time = $request->appointment_time;
+        $user = auth()->user();
+
+        if ($user->role === 'patient') {
+            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id);
+        } else {
+            $appointment = Appointment::findOrFail($id);
+        }
+
+        if (!$appointment) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Appointment not found',
+            ], 404);
+        }
+
+        $appointment->doctor_id = $validated->doctor_id;
+        $appointment->appointment_date = $validated->appointment_date;
+        $appointment->appointment_time = $validated->appointment_time;
 
         $appointment->save();
 
@@ -58,7 +101,21 @@ class AppointmentController extends Controller
 
     public function destroy($id)
     {
-        $appointment = Appointment::find($id);
+        $user = auth()->user();
+
+        if ($user->role === 'patient') {
+            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id);
+        } else {
+            $appointment = Appointment::findOrFail($id);
+        }
+
+        if (!$appointment) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Appointment not found'
+            ], 404);
+        }
+
         $appointment->delete();
 
         return response()->json([

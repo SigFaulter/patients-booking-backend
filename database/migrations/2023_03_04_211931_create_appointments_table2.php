@@ -19,9 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor_id')->unique();
             $table->date('appointment_date');
             $table->time('appointment_time');
-            $table->string('status')->default('pending');
+            $table->string('status');
             $table->unsignedBigInteger('bill_amount')->nullable();
-            $table->unsignedBigInteger('bill_status')->default('pending');
+            $table->unsignedBigInteger('bill_status');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');

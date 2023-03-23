@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseStoreRequest;
-
-class RegisterUserRequest extends BaseStoreRequest
+class UpdateAvailabilityStoreRequest extends BaseStoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +22,10 @@ class RegisterUserRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'fullname' => 'required|string|min:5|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'string|min:8|confirmed',
-            'password2' => 'string|min:8',
-            'phone_number' => 'string|max:10',
+            'doctor_id' => 'required|integer',
+            'date' => 'required|date_format:Y-m-d',
+            'start_time' => 'required|date_format:H:i:s',
+            'end_time' => 'required|date_format:H:i:s|after:start_time',
         ];
     }
-
-
 }

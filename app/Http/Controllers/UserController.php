@@ -10,19 +10,19 @@ use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
-    public function getUser()
+    public function index()
     {
         $user = Auth::user();
 
-        return response()->json(['user' => $user]);
+        return response()->json($user);
     }
 
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $request)
     {
         // TODO make it update the patient details and user table at the same time
         $validated = $request->validated();
 
-        $user = User::find($validated['id']);
+        $user = User::findOrFail($validated['id']);
         if (!$user) {
             return response()->json([
                 'error' => true,

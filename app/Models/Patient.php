@@ -10,6 +10,7 @@ class Patient extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
+        'patient_id',
         'full_name',
         'phone_number',
         'id_card',

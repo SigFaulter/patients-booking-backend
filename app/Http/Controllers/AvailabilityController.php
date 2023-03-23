@@ -3,31 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Availability;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateAvailabilityStoreRequest;
+use App\Http\Requests\StoreAvailabilityStoreRequest;
 
 class AvailabilityController extends Controller
 {
     public function index()
     {
-        $availabilities = Availability::all();
-
-        return response()->json([
-            'data' => $availabilities,
-        ]);
+        $availability = Availability::all();
+        return response()->json($availability);
     }
 
-    public function store(Request $request)
+    public function store(StoreAvailabilityStoreRequest $request)
     {
-        $validatedData = $request->validate([
-            'doctor_id' => 'required|integer',
-            'date' => 'required|date_format:Y-m-d',
-            'start_time' => 'required|date_format:H:i:s',
-            'end_time' => 'required|date_format:H:i:s|after:start_time',
-        ]);
+        $validated = $request->validated();
 
-        $availability = Availability::create($validatedData);
+        $availability = Availability::create($validated);
 
         return response()->json([
+            'error' => false,
             'message' => 'Availability created successfully',
             'data' => $availability,
         ], 201);
@@ -42,19 +36,23 @@ class AvailabilityController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAvailabilityStoreRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'doctor_id' => 'integer',
-            'date' => 'date_format:Y-m-d',
-            'start_time' => 'date_format:H:i:s',
-            'end_time' => 'date_format:H:i:s|after:start_time',
-        ]);
+        $validated = $request->validated();
 
         $availability = Availability::findOrFail($id);
-        $availability->update($validatedData);
+        
+        if ($availability === null) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Availability not found',
+            ], 404);
+        }
+
+        $availability->update($validated);
 
         return response()->json([
+            'error' => false,
             'message' => 'Availability updated successfully',
             'data' => $availability,
         ]);
@@ -66,7 +64,8 @@ class AvailabilityController extends Controller
         $availability->delete();
 
         return response()->json([
+            'error' => false,
             'message' => 'Availability deleted successfully',
-        ]);
+        ], 201);
     }
 }

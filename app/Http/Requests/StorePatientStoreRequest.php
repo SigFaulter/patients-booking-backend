@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseStoreRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends BaseStoreRequest
+class StorePatientStoreRequest extends BaseStoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,12 @@ class RegisterUserRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'fullname' => 'required|string|min:5|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'string|min:8|confirmed',
-            'password2' => 'string|min:8',
+            'full_name' => 'string|max:50',
+            'email' => 'email|unique:users',
+            'password' => 'string|min:8',
             'phone_number' => 'string|max:10',
+            'city' => 'string|max:50',
+            'id_card' => 'string|<max:10></max:10>|unique:patients',
         ];
     }
-
-
 }

@@ -15,7 +15,15 @@ class DoctorController extends Controller
 
     public function show($id)
     {
-        $doctor = Doctor::find($id);
+        $doctor = Doctor::findOrFail($id);
+
+        if (!$doctor) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Doctor not found',
+            ], 404);
+        }
+
         return response()->json($doctor);
     }
 
@@ -27,14 +35,12 @@ class DoctorController extends Controller
             'full_name' => $validated['full_name'],
             'phone_number' => $validated['phone_number'],
             'city' => $validated['city'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password'])
         ]);
 
         $doctor->save();
 
         return response()->json([
-            'success' => true,
+            'error' => false,
             'message' => 'Doctor created successfully',
         ], 200);
     }
@@ -43,7 +49,14 @@ class DoctorController extends Controller
     {
         $validated = $request->validated();
 
-        $doctor = Doctor::find($id);
+        $doctor = Doctor::findOrFail($id);
+
+        if (!$doctor) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Doctor not found',
+            ], 404);
+        }
 
         $doctor->full_name = $validated['full_name'];
         $doctor->phone_number = $validated['phone_number'];
@@ -53,7 +66,7 @@ class DoctorController extends Controller
         $doctor->save();
 
         return response()->json([
-            'success' => true,
+            'error' => false,
             'message' => 'Doctor updated successfully',
             'doctor' => $doctor
         ], 200);
@@ -61,12 +74,20 @@ class DoctorController extends Controller
 
     public function destroy($id)
     {
-        $doctor = Doctor::find($id);
+        $doctor = Doctor::findOrFail($id);
+
+        if (!$doctor) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Doctor not found',
+            ], 404);
+        }
+
         $doctor->delete();
 
         return response()->json([
-            'success' => true,
+            'error' => false,
             'message' => 'Doctor deleted successfully'
-        ], 204);
+        ], 201);
     }
 }

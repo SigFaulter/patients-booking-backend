@@ -11,20 +11,21 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('patient_id')->unsigned()->index()->nullable();
+            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('full_name');
             $table->date('birthday')->nullable();
-            $table->integer('age')->nullable();
             $table->string('id_card')->unique()->nullable();
             $table->text('medical_history')->nullable();
             $table->string('phone_number')->nullable();
             $table->timestamps();
-
-            $table->foreign('id')->references('id')->on('users');
         });
     }
+    
 
     /**
      * Reverse the migrations.

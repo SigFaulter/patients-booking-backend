@@ -39,6 +39,13 @@ class PatientController extends Controller
     {
         $patient = Patient::findOrFail($id);
 
+        if (!$patient) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Patient not found'
+            ], 404);
+        }
+
         return response()->json([
             'data' => $patient,
         ]);
@@ -56,6 +63,14 @@ class PatientController extends Controller
         ]);
 
         $patient = Patient::findOrFail($id);
+
+        if (!$patient) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Patient not found'
+            ], 404);
+        }
+
         $patient->update($validatedData);
 
         return response()->json([
@@ -67,6 +82,14 @@ class PatientController extends Controller
     public function destroy($id)
     {
         $patient = Patient::findOrFail($id);
+        
+        if (!$patient) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Patient not found'
+            ], 404);
+        }
+
         $patient->delete();
 
         return response()->json([

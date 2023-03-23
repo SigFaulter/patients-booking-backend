@@ -22,15 +22,15 @@ class AuthController extends Controller
         ]);
 
         $user->save();
+        $user = User::where('email', $validated['email'])->first();
 
-        if ($validated['full_name']) {
             $patient = new Patient([
-                'full_name' => $validated['full_name'],
-                'user_id' => $user->id,
-            ]);    
+                'full_name' => $validated['fullname'],
+                'patient_id' => $user->id,
+                'phone_number' => $validated['phone_number'],
+            ]);
             
             $patient->save();
-        }
 
         return response()->json([
             'error' => false,
@@ -56,7 +56,8 @@ class AuthController extends Controller
         return response()->json([
             'error' => false,
             'message' => 'Login successful!',
-            'role' => $user->role
+            'role' => $user->role,
+            'Authorization' => 'Bearer ' . $token
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Access-Control-Expose-Headers' => 'Authorization',
