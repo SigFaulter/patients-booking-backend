@@ -12,9 +12,9 @@ class AppointmentController extends Controller
     {   
         $user = auth()->user();
         
-        if ($user->role === 'patient') {
-            $appointments = Appointment::where('patient_id', $user->id);
-        } else if ($user->role === 'admin') {
+        if ($user->role === 'doctor') {
+            $appointments = Appointment::where('doctor_id', $user->id);
+        } else {
             $appointments = Appointment::all();
         }
 

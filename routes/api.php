@@ -45,6 +45,6 @@ Route::middleware(['auth.role:patient'])->group(function () {
     Route::apiResource('users', UserController::class)->only('show', 'update', 'delete');
     Route::apiResource('patients', PatientController::class)->only(['show', 'update', 'destroy']);
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
-    Route::apiResource('appointments', AppointmentController::class);
+    Route::apiResource('appointments', AppointmentController::class)->only(['show', 'update', 'destroy']);
     Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
 });    
