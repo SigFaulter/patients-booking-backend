@@ -24,9 +24,9 @@ class DoctorRequest extends BaseRequest
     public function rules()
     {
         return [
-            'full_name' => 'string|min:3|max:50',
-            'phone_number' => 'required|string|max:20',
-            'city' => 'required|string|max:255',
+            'full_name' => 'required|string|between:5,50',
+            'phone_number' => 'required|string|max:10',
+            'city' => 'required|string|max:50',
             'email' => 'required|string|email|unique:users,email|max:255',
             'password' => 'required|string|min:6|max:255',
         ];
