@@ -35,13 +35,15 @@ Route::middleware(['auth.role:admin'])->group(function () {
 });
     
 Route::middleware(['auth.role:doctor'])->group(function () {
+    Route::apiResource('users', UserController::class)->only('show', 'update', 'delete');
     Route::apiResource('patients', PatientController::class)->only(['index', 'show']);
     Route::apiResource('doctors', DoctorController::class);
     Route::apiResource('availability', AvailabilityController::class);
 });
 
 Route::middleware(['auth.role:patient'])->group(function () {
-    Route::apiResource('patients', PatientController::class);
+    Route::apiResource('users', UserController::class)->only('show', 'update', 'delete');
+    Route::apiResource('patients', PatientController::class)->only(['show', 'update', 'destroy']);
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::apiResource('appointments', AppointmentController::class);
     Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
