@@ -57,6 +57,7 @@ class AuthController extends Controller
             'error' => false,
             'message' => 'Login successful!',
             'role' => $user->role,
+            'id' => $user->id,
             'Authorization' => 'Bearer ' . $token
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,
