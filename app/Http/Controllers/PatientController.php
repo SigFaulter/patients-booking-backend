@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePatientStoreRequest;
+use App\Http\Requests\StorePatientRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +25,7 @@ class PatientController extends Controller
         return response()->json([$patients]);
     }
 
-    public function store(StorePatientStoreRequest $request)
+    public function store(StorePatientRequest $request)
     {
         $validated = $request->validated();
 
@@ -40,7 +40,7 @@ class PatientController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        
+
         if ($user->role != 'admin') {
             if ($user->id != $id) {
                 return response()->json([
@@ -60,7 +60,7 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'data' => $patient,
+            $patient,
         ]);
     }
 

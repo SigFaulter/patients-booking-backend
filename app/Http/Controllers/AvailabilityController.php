@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Availability;
-use App\Http\Requests\UpdateAvailabilityStoreRequest;
-use App\Http\Requests\StoreAvailabilityStoreRequest;
+use App\Http\Requests\UpdateAvailabilityRequest;
+use App\Http\Requests\StoreAvailabilityRequest;
 
 class AvailabilityController extends Controller
 {
@@ -14,7 +14,7 @@ class AvailabilityController extends Controller
         return response()->json($availability);
     }
 
-    public function store(StoreAvailabilityStoreRequest $request)
+    public function store(StoreAvailabilityRequest $request)
     {
         $validated = $request->validated();
 
@@ -36,7 +36,7 @@ class AvailabilityController extends Controller
         ]);
     }
 
-    public function update(UpdateAvailabilityStoreRequest $request, $id)
+    public function update(UpdateAvailabilityRequest $request, $id)
     {
         $validated = $request->validated();
 

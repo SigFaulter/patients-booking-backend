@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
-use App\Http\Requests\RegisterAppointmentStoreRequest;
-use App\Http\Requests\UpdateAppointmentStoreRequest;
+use App\Http\Requests\RegisterAppointmentRequest;
+use App\Http\Requests\UpdateAppointmentRequest;
 
 class AppointmentController extends Controller
 {
@@ -48,7 +48,7 @@ class AppointmentController extends Controller
         return response()->json($appointment);
     }
 
-    public function store(RegisterAppointmentStoreRequest $request)
+    public function store(RegisterAppointmentRequest $request)
     {
         $validated = $request->validated();
 
@@ -68,7 +68,7 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    public function update(UpdateAppointmentStoreRequest $request, $id)
+    public function update(UpdateAppointmentRequest $request, $id)
     {
         $validated = $request->validated();
 

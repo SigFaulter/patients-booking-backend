@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class UpdateAvailabilityStoreRequest extends BaseStoreRequest
+class UpdateAvailabilityRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

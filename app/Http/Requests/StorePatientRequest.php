@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Http\Requests;
 
-class UpdateAppointmentStoreRequest extends BaseStoreRequest
+class StorePatientRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -10,7 +11,6 @@ class UpdateAppointmentStoreRequest extends BaseStoreRequest
      */
     public function authorize()
     {
-        // You can add authorization logic here if needed
         return true;
     }
 
@@ -22,10 +22,10 @@ class UpdateAppointmentStoreRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'sometimes|nullable|exists:doctors,id',
-            'appointment_date' => 'sometimes|nullable|date',
-            'appointment_time' => 'sometimes|nullable|string'
+            'full_name' => 'required|string|min:3|max:50',
+            'phone_number' => 'required|string|max:10',
+            'city' => 'required|string|max:50',
+            'id_card' => 'required|string|max:required|unique:patients',
         ];
     }
 }

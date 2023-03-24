@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseStoreRequest;
-class RegisterDoctorStoreRequest extends BaseStoreRequest
+use App\Http\Requests\BaseRequest;
+class RegisterAppointmentRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +12,7 @@ class RegisterDoctorStoreRequest extends BaseStoreRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,10 @@ class RegisterDoctorStoreRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|string|between:5,255',
-            'phone_number' => 'required|email|unique:users',
-            'city' => 'required|between:4,255'
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'appointment_date' => 'required|date_format:Y-m-d',
+            'appointment_time' => 'required|date_format:H:i:s',
         ];
     }
 

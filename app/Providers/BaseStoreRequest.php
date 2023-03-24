@@ -2,7 +2,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-class BaseStoreRequest extends FormRequest
+class BaseRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
