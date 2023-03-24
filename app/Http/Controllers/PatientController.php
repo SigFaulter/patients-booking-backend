@@ -39,6 +39,17 @@ class PatientController extends Controller
 
     public function show($id)
     {
+        $user = Auth::user();
+        
+        if ($user->role != 'admin') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
+
         $patient = Patient::findOrFail($id);
 
         if (!$patient) {
