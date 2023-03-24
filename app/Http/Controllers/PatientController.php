@@ -11,15 +11,6 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'patient') {
-            return response()->json([
-                'error' => true,
-                'message' => 'Forbidden',
-            ], 403);
-        }
-
         $patients = Patient::all();
 
         return response()->json([$patients]);
@@ -59,9 +50,7 @@ class PatientController extends Controller
             ], 404);
         }
 
-        return response()->json([
-            $patient,
-        ]);
+        return response()->json($patient);
     }
 
     public function update(Request $request, $id)

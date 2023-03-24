@@ -18,21 +18,30 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('users', UserController::class);
+});
+    
+Route::middleware(['auth.role:admin'])->group(function () {
+    Route::apiResource('doctors', DoctorController::class);
+    Route::apiResource('patients', PatientController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('appointments', AppointmentController::class);
+    Route::apiResource('availability', AvailabilityController::class);
+});
+    
+Route::middleware(['auth.role:doctor'])->group(function () {
+    Route::apiResource('patients', PatientController::class)->only(['index', 'show']);
+    Route::apiResource('doctors', DoctorController::class);
+    Route::apiResource('availability', AvailabilityController::class);
 });
 
-Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
-    Route::resource('users', UserController::class)->only(['index', 'update', 'destroy', 'show']);
-    Route::resource('appointments', AppointmentController::class)->except(['create', 'edit']);
-});
-
-Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
-    Route::resource('availability', AvailabilityController::class)->except(['create', 'edit']);
-    Route::resource('doctors', DoctorController::class)->only(['index', 'show']);
-    Route::resource('patients', PatientController::class)->only(['index', 'show', 'destroy', 'update']);
-});
+Route::middleware(['auth.role:patient'])->group(function () {
+    Route::apiResource('patients', PatientController::class);
+    Route::apiResource('appointments', AppointmentController::class);
+    Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
+});    

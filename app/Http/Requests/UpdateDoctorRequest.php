@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseRequest;
-class RegisterDoctorRequest extends BaseRequest
+class UpdateDoctorRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +11,7 @@ class RegisterDoctorRequest extends BaseRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,13 +22,11 @@ class RegisterDoctorRequest extends BaseRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|string|between:5,50',
-            'phone_number' => 'required|string|max:10',
-            'city' => 'required|string|max:50',
+            'full_name' => 'sometimes|string|between:5,50',
+            'phone_number' => 'sometimes|string|max:10',
+            'city' => 'sometimes|string|max:50',
             'description' => 'sometimes|string|max:255',
-            'qualifications' => 'required|string|max:255',
+            'qualifications' => 'sometimes|string|max:255',
         ];
     }
-
-
 }

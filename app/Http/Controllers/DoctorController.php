@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -47,6 +48,17 @@ class DoctorController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+
+        if ($user->role != 'admin') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
+
         $validated = $request->validated();
 
         $doctor = Doctor::findOrFail($id);
@@ -61,7 +73,8 @@ class DoctorController extends Controller
         $doctor->full_name = $validated['full_name'];
         $doctor->phone_number = $validated['phone_number'];
         $doctor->city = $validated['city'];
-        $doctor->email = $validated['email'];
+        $doctor->qualifications = $validated['qualifications'];
+        $doctor->description = $validated['description'];
 
         $doctor->save();
 

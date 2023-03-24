@@ -31,9 +31,7 @@ class AvailabilityController extends Controller
     {
         $availability = Availability::findOrFail($id);
 
-        return response()->json([
-            'data' => $availability,
-        ]);
+        return response()->json($availability);
     }
 
     public function update(UpdateAvailabilityRequest $request, $id)
