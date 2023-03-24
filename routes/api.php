@@ -22,16 +22,16 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth.role:admin,doctor,user,patient'])->group(function () {
+Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware(['auth.role:admin,doctor,user,patient'])->group(function () {
-    Route::resource('users', UserController::class)->only(['index', 'update', 'destroy']);
+Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
+    Route::resource('users', UserController::class)->only(['index', 'update', 'destroy', 'show']);
     Route::resource('appointments', AppointmentController::class)->except(['create', 'edit']);
 });
 
-Route::middleware(['auth.role:admin,doctor,user,patient'])->group(function () {
+Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::resource('availability', AvailabilityController::class)->except(['create', 'edit']);
     Route::resource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::resource('patients', PatientController::class)->only(['index', 'show']);

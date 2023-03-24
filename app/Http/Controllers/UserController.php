@@ -17,12 +17,47 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function update(UpdateUserRequest $request)
+    public function show($id)
     {
-        // TODO make it update the patient details and user table at the same time
-        $validated = $request->validated();
+        $user = auth()->user();
 
-        $user = User::findOrFail($validated['id']);
+        if ($user->role === 'patient' || $user->role === 'doctor') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        } 
+
+        $user = User::findOrFail($id);
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        return response()->json($user);
+    }
+
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $validated = $request->validated();
+        $user = Auth::user();
+
+        if ($user->role === 'patient' || $user->role === 'doctor') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
+        
+        $user = User::findOrFail($id);
+
         if (!$user) {
             return response()->json([
                 'error' => true,
@@ -31,8 +66,8 @@ class UserController extends Controller
         }
 
         $user = new User([
-            'name' => $validated['full_name'],
             'email' => $validated['email'],
+            'password' => $validated['password']
         ]);
 
         $user->save();
@@ -43,11 +78,21 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function deleteUser()
+    public function delete($id)
     {
         $user = Auth::user();
+
+        if ($user->role === 'patient' || $user->role === 'doctor') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
+
         // TODO delete related records in patients table
-        // $user->delete();
+        // User::delete();
 
         return response()->json([
             'success' => true,
