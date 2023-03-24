@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 class StorePatientStoreRequest extends BaseStoreRequest
 {
     /**
@@ -24,12 +22,10 @@ class StorePatientStoreRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'full_name' => 'string|max:50',
-            'email' => 'email|unique:users',
-            'password' => 'string|min:8',
-            'phone_number' => 'string|max:10',
-            'city' => 'string|max:50',
-            'id_card' => 'string|<max:10></max:10>|unique:patients',
+            'full_name' => 'required|string|min:3|max:50',
+            'phone_number' => 'required|string|max:10',
+            'city' => 'required|string|max:50',
+            'id_card' => 'required|string|max:required|unique:patients',
         ];
     }
 }

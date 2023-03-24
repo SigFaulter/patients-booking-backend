@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'patient' || $user->role === 'doctor') {
+        if ($user->role != 'admin') {
             if ($user->id != $id) {
                 return response()->json([
                     'error' => true,
@@ -47,7 +47,7 @@ class UserController extends Controller
         $validated = $request->validated();
         $user = Auth::user();
 
-        if ($user->role === 'patient' || $user->role === 'doctor') {
+        if ($user->role != 'admin') {
             if ($user->id != $id) {
                 return response()->json([
                     'error' => true,
@@ -82,7 +82,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'patient' || $user->role === 'doctor') {
+        if ($user->role != 'admin') {
             if ($user->id != $id) {
                 return response()->json([
                     'error' => true,
@@ -92,7 +92,7 @@ class UserController extends Controller
         }
 
         // TODO delete related records in patients table
-        // User::delete();
+        //User::delete();
 
         return response()->json([
             'success' => true,

@@ -24,7 +24,7 @@ class DoctorStoreRequest extends BaseStoreRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|string|max:255',
+            'full_name' => 'string|min:3|max:50',
             'phone_number' => 'required|string|max:20',
             'city' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email|max:255',

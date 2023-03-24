@@ -34,5 +34,5 @@ Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
 Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::resource('availability', AvailabilityController::class)->except(['create', 'edit']);
     Route::resource('doctors', DoctorController::class)->only(['index', 'show']);
-    Route::resource('patients', PatientController::class)->only(['index', 'show']);
+    Route::resource('patients', PatientController::class)->only(['index', 'show', 'destroy', 'update']);
 });

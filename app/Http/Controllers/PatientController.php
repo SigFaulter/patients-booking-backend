@@ -2,32 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePatientStoreRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->role === 'patient') {
+            return response()->json([
+                'error' => true,
+                'message' => 'Forbidden',
+            ], 403);
+        }
+
         $patients = Patient::all();
 
-        return response()->json([
-            'data' => $patients,
-        ]);
+        return response()->json([$patients]);
     }
 
-    public function store(Request $request)
+    public function store(StorePatientStoreRequest $request)
     {
-        $validatedData = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:patients',
-            'password' => 'required|string|min:6',
-            'phone_number' => 'required|string|max:15',
-            'city' => 'required|string|max:255',
-            'id_card' => 'required|string|max:14|unique:patients',
-        ]);
+        $validated = $request->validated();
 
-        $patient = Patient::create($validatedData);
+        $patient = Patient::create($validated);
 
         return response()->json([
             'message' => 'Patient created successfully',
@@ -53,14 +55,17 @@ class PatientController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'full_name' => 'string|max:255',
-            'email' => 'email|unique:patients,email,' . $id,
-            'password' => 'string|min:6',
-            'phone_number' => 'string|max:15',
-            'city' => 'string|max:255',
-            'id_card' => 'string|max:14|unique:patients,id_card,' . $id,
-        ]);
+        $user = Auth::user();
+        $validated = $request->validated();
+
+        if ($user->role != 'admin') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
 
         $patient = Patient::findOrFail($id);
 
@@ -71,16 +76,27 @@ class PatientController extends Controller
             ], 404);
         }
 
-        $patient->update($validatedData);
+        $patient->update($validated);
 
         return response()->json([
             'message' => 'Patient updated successfully',
             'data' => $patient,
-        ]);
+        ], 200);
     }
 
     public function destroy($id)
     {
+        $user = Auth::user();
+
+        if ($user->role != 'admin') {
+            if ($user->id != $id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        }
+        
         $patient = Patient::findOrFail($id);
         
         if (!$patient) {
@@ -90,10 +106,12 @@ class PatientController extends Controller
             ], 404);
         }
 
-        $patient->delete();
+        // TODO delete all related records
+        // $patient->delete();
 
         return response()->json([
+            'error' => false,
             'message' => 'Patient deleted successfully',
-        ]);
+        ], 200);
     }
 }
