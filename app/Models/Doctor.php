@@ -14,7 +14,8 @@ class Doctor extends Authenticatable
         'phone_number',
         'city',
         'qualifications',
-        'patients_treated'
+        'patients_treated',
+        'rating' // TODO update this automaticall from users reviews
     ];
 
     protected $hidden = [
