@@ -23,7 +23,6 @@ class RegisterAppointmentRequest extends BaseRequest
     public function rules()
     {
         return [
-            'patient_id' => 'required|exists:patients,id',
             'doctor_id' => 'required|exists:doctors,id',
             'appointment_date' => 'required|date_format:Y-m-d',
             'appointment_time' => 'required|date_format:H:i:s',
