@@ -75,10 +75,7 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return response()->json([
-            'message' => 'Patient updated successfully',
-            'data' => $patient,
-        ], 200);
+        return response()->json($patient, 200);
     }
 
     public function destroy($id)
