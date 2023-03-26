@@ -13,7 +13,7 @@ class PatientController extends Controller
     {
         $patients = Patient::all();
 
-        return response()->json([$patients]);
+        return response()->json($patients);
     }
 
     public function store(StorePatientRequest $request)
