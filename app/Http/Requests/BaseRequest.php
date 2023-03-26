@@ -9,6 +9,6 @@ class BaseRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json(['error' => true, $validator->errors()], 422));
+        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
     }
 }

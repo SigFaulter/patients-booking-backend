@@ -22,7 +22,10 @@ class PatientController extends Controller
 
         $patient = Patient::create($validated);
 
-        return response()->json($patient, 201);
+        return response()->json([
+            'message' => 'Patient created successfully',
+            'data' => $patient,
+        ], 201);
     }
 
     public function show($id)
@@ -75,7 +78,10 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return response()->json($patient, 200);
+        return response()->json([
+            'message' => 'Patient updated successfully',
+            'data' => $patient,
+        ], 200);
     }
 
     public function destroy($id)
