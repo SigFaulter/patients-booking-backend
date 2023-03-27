@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 use App\Http\Requests\UpdateUserRequest;
 
@@ -34,7 +35,7 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    // TODO handle pfp upload
+    // TODO handle image upload
     public function update(UpdateUserRequest $request, $id)
     {
         $validated = $request->validated();
@@ -48,26 +49,28 @@ class UserController extends Controller
             ], 404);
         }
 
-        $user = new User($validated);
+        $temp = Arr::except($validated, ['image']);
+
+        $user->update($temp);
         
-        if ($request->has('pfp')) {
-            $image = base64_decode($request->pfp);
+        if ($request->has('image')) {
+            $image = base64_decode($request->image);
         
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-            $extension = pathinfo($validated['pfp_file_name'], PATHINFO_EXTENSION);
+            $extension = pathinfo($validated['image_file_name'], PATHINFO_EXTENSION);
 
             if (!in_array($extension, $allowedExtensions)) {
                 return response()->json(['error' => true, 'message' => 'Invalid file type'], 400);
             }
 
             // Generate a unique name for the file
-            $file_name = Str::random(40) . '.' . $request->pfp_name;
+            $file_name = Str::random(40) . '.' . $request->image_name . $extension;
 
             // Move the uploaded file to the public directory
             Storage::disk('public')->put($file_name, $image);
 
             // Save the file name to the user's profile
-            $user['pfp'] = $file_name;
+            $user['image'] = $file_name;
         }
 
         try {

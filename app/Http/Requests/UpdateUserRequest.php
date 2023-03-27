@@ -24,10 +24,10 @@ class UpdateUserRequest extends BaseRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:255',
-            'pfp' => 'sometimes|string',
-            'pfp_file_name' => 'sometimes|string'
+            'email' => 'sometimes|email|unique:users,email',
+            'password' => 'sometimes|min:8|max:255',
+            'image' => 'sometimes|string',
+            'image_file_name' => 'sometimes|string'
         ];
     }
 
