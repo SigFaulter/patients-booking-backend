@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterDoctorRequest;
+use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Doctor;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -25,10 +25,10 @@ class DoctorController extends Controller
             ], 404);
         }
 
-        return response()->json($doctor);
+        return response()->json($doctor, 200);
     }
 
-    public function store(Request $request)
+    public function store(RegisterDoctorRequest $request)
     {
         $validated = $request->validated();
 
@@ -38,7 +38,14 @@ class DoctorController extends Controller
             'city' => $validated['city'],
         ]);
 
-        $doctor->save();
+        try {
+            $doctor->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json([
             'error' => false,
@@ -46,19 +53,8 @@ class DoctorController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateDoctorRequest $request, $id)
     {
-        $user = Auth::user();
-
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
-
         $validated = $request->validated();
 
         $doctor = Doctor::findOrFail($id);
@@ -76,7 +72,14 @@ class DoctorController extends Controller
         $doctor->qualifications = $validated['qualifications'];
         $doctor->description = $validated['description'];
 
-        $doctor->save();
+        try {
+            $doctor->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json([
             'error' => false,
@@ -96,11 +99,19 @@ class DoctorController extends Controller
             ], 404);
         }
 
-        $doctor->delete();
+        /*try {
+            // TODO delete all related records
+            // $doctor->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }*/
 
         return response()->json([
             'error' => false,
             'message' => 'Doctor deleted successfully'
-        ], 201);
+        ], 204);
     }
 }

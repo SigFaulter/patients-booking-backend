@@ -22,16 +22,21 @@ class AuthController extends Controller
         ]);
 
         $user->save();
+
         $user = User::where('email', $validated['email'])->first();
 
-        $patient = new Patient([
-            'full_name' => $validated['fullname'],
-            'patient_id' => $user->id,
-            'phone_number' => $validated['phone_number'],
-        ]);
-        
-        $patient->save();
+        $patient = new Patient($validated);
+        $patient->patient_id = $user->id;
 
+        try {
+        $patient->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+        
         return response()->json([
             'error' => false,
             'message' => 'User created successfully!',

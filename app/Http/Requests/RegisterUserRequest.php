@@ -24,11 +24,12 @@ class RegisterUserRequest extends BaseRequest
     public function rules()
     {
         return [
-            'fullname' => 'required|string|min:5|max:255',
+            'full_name' => 'required|string|min:5|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'string|min:8|confirmed',
-            'password2' => 'string|min:8',
-            'phone_number' => 'string|max:10',
+            'password' => 'required|string|min:8|confirmed',
+            'phone_number' => 'required|string|max:10',
+            'birthday' => 'required|date',
+            'id_card' => 'required|string|max:50'
         ];
     }
 

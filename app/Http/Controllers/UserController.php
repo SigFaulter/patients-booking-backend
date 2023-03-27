@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 
 use App\Http\Requests\UpdateUserRequest;
@@ -21,15 +22,6 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        } 
-
         $user = User::findOrFail($id);
 
         if (!$user) {
@@ -42,20 +34,11 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    // TODO handle pfp upload
     public function update(UpdateUserRequest $request, $id)
     {
         $validated = $request->validated();
-        $user = Auth::user();
 
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
-        
         $user = User::findOrFail($id);
 
         if (!$user) {
@@ -78,20 +61,25 @@ class UserController extends Controller
         ], 201);
     }
 
-    // TODO add store for admin to add new users
+    public function store(RegisterUserRequest $request) {
+        $validated = $request->validated();
 
-    public function delete($id)
+        $user = new User($validated);
+        
+        try {
+            $user->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+    }
+
+    public function destroy($id)    
     {
         $user = Auth::user();
-
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
 
         // TODO delete related records in patients table
         //User::delete();
@@ -99,7 +87,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully'
-        ], 200)->withCookie(cookie('token', '', 1, null, null, false, true));
+        ], 204)->withCookie(cookie('token', '', 1, null, null, false, true));
     }
 }
 ?>

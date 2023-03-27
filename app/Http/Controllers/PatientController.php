@@ -36,7 +36,6 @@ class PatientController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'error' => 'An error occurred while creating the patient',
                 'message' => $e->getMessage(),
             ], 500);
         }
@@ -44,18 +43,7 @@ class PatientController extends Controller
 
     public function show($id)
     {
-        $user = Auth::user();
-
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
-
-        $patient = Patient::findOrFail($id);
+        $patient = Patient::where('patient_id', $id)->firstOrFail();
 
         if (!$patient) {
             return response()->json([
@@ -69,17 +57,7 @@ class PatientController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = Auth::user();
         $validated = $request->validated();
-
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
 
         $patient = Patient::findOrFail($id);
 
@@ -100,17 +78,6 @@ class PatientController extends Controller
 
     public function destroy($id)
     {
-        $user = Auth::user();
-
-        if ($user->role != 'admin') {
-            if ($user->id != $id) {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-        }
-        
         $patient = Patient::findOrFail($id);
         
         if (!$patient) {
@@ -126,6 +93,6 @@ class PatientController extends Controller
         return response()->json([
             'error' => false,
             'message' => 'Patient deleted successfully',
-        ], 200);
+        ], 204);
     }
 }

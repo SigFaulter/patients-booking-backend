@@ -23,28 +23,27 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->middleware('auth.resource:user');
 });
     
 Route::middleware(['auth.role:admin'])->group(function () {
     Route::apiResource('doctors', DoctorController::class);
     Route::apiResource('patients', PatientController::class);
-    Route::apiResource('users', UserController::class);
     Route::apiResource('appointments', AppointmentController::class);
     Route::apiResource('availability', AvailabilityController::class);
 });
     
 Route::middleware(['auth.role:doctor'])->group(function () {
-    Route::apiResource('users', UserController::class)->only('show', 'update', 'delete');
     Route::apiResource('patients', PatientController::class)->only(['index', 'show']);
-    Route::apiResource('doctors', DoctorController::class);
+    Route::apiResource('doctors', DoctorController::class)->only('update', 'destroy')->middleware('auth.resource:doctor');
+    Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
     Route::apiResource('availability', AvailabilityController::class);
 });
 
 Route::middleware(['auth.role:patient'])->group(function () {
-    Route::apiResource('users', UserController::class)->only('show', 'update', 'delete');
-    Route::apiResource('patients', PatientController::class)->only(['show', 'update', 'destroy']);
+    Route::apiResource('patients', PatientController::class)->only('show', 'update', 'destroy')->middleware('auth.resource:patient');
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
-    Route::apiResource('appointments', AppointmentController::class)->only(['show', 'store', 'update', 'destroy']);
+    Route::apiResource('appointments', AppointmentController::class)->only('show');
+    Route::apiResource('appointments', AppointmentController::class)->only('store', 'update', 'destroy')->middleware('auth.resource:patient');
     Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
 });    

@@ -26,7 +26,7 @@ class UpdateUserRequest extends BaseRequest
         return [
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|max:255',
-            'pfp' => 'sometimes'
+            'pfp' => 'sometimes|mimes:jpeg,png|max:2048'
         ];
     }
 

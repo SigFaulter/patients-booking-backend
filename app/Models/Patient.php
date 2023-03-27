@@ -15,7 +15,6 @@ class Patient extends Authenticatable
         'phone_number',
         'id_card',
         'birthday',
-        'age',
         'medical_history',
     ];
 

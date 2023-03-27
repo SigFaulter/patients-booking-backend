@@ -93,12 +93,20 @@ class AppointmentController extends Controller
         $appointment->appointment_date = $validated->appointment_date;
         $appointment->appointment_time = $validated->appointment_time;
 
-        $appointment->save();
+        try {
+            $appointment->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json([
+            'error' => false,
             'message' => 'Appointment updated successfully',
             'appointment' => $appointment
-        ]);
+        ], 200);
     }
 
     public function destroy($id)
@@ -118,9 +126,17 @@ class AppointmentController extends Controller
             ], 404);
         }
 
-        $appointment->delete();
+        try {
+            $appointment->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json([
+            'error' => false,
             'message' => 'Appointment deleted successfully'
         ], 204);
     }
