@@ -78,6 +78,8 @@ class UserController extends Controller
         ], 201);
     }
 
+    // TODO add store for admin to add new users
+
     public function delete($id)
     {
         $user = Auth::user();

@@ -25,7 +25,8 @@ class UpdateUserRequest extends BaseRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:255'
+            'password' => 'required|min:8|max:255',
+            'pfp' => 'sometimes'
         ];
     }
 

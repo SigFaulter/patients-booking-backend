@@ -24,13 +24,13 @@ class AuthController extends Controller
         $user->save();
         $user = User::where('email', $validated['email'])->first();
 
-            $patient = new Patient([
-                'full_name' => $validated['fullname'],
-                'patient_id' => $user->id,
-                'phone_number' => $validated['phone_number'],
-            ]);
-            
-            $patient->save();
+        $patient = new Patient([
+            'full_name' => $validated['fullname'],
+            'patient_id' => $user->id,
+            'phone_number' => $validated['phone_number'],
+        ]);
+        
+        $patient->save();
 
         return response()->json([
             'error' => false,
@@ -68,12 +68,12 @@ class AuthController extends Controller
     {
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
-        } catch (JWTException $e) {
+        } catch (JWTException) {
             return response()->json(['error' => true,
                 'message' => 'Could not invalidate token'
             ], 500);
         }
 
-        return response()->json(['error' => false, 'message' => 'Successfully logged out']);
+        return response()->json(['error' => false, 'message' => 'Successfully logged out'], 200);
     }
 }

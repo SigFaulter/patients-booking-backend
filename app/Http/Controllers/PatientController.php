@@ -11,21 +11,35 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $patients = Patient::all();
+        $user = Auth::user();
+        if ($user->role === 'patient') {
+            $patients = Patient::where('patient_id', $user->id)->first();
+        } else {
+            $patients = Patient::all();
+        }
 
-        return response()->json($patients);
+        return response()->json($patients, 200);
     }
 
     public function store(StorePatientRequest $request)
     {
         $validated = $request->validated();
 
-        $patient = Patient::create($validated);
+        try {
+            $patient = Patient::create($validated);
 
-        return response()->json([
-            'message' => 'Patient created successfully',
-            'data' => $patient,
-        ], 201);
+            return response()->json([
+                'error' => false,
+                'message' => 'Patient created successfully',
+                'data' => $patient,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'error' => 'An error occurred while creating the patient',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function show($id)
