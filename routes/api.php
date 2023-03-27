@@ -23,7 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('users', UserController::class)->middleware('auth.resource:user');
+    Route::apiResource('users', UserController::class)->except('index')->middleware('auth.resource:user');
 });
     
 Route::middleware(['auth.role:admin'])->group(function () {
