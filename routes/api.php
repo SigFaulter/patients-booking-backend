@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('chat', ChatController::class)->only('index', 'store');
     Route::apiResource('users', UserController::class)->except('index')->middleware('auth.resource:user');
 });
     

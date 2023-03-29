@@ -22,10 +22,5 @@ class Doctor extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
 }
 ?>
