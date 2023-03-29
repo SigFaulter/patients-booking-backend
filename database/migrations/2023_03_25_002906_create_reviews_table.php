@@ -15,14 +15,12 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('patient_id')->unsigned()->index()->nullable();
+            $table->bigInteger('patient_id')->unsigned()->index();
             $table->foreign('patient_id')->references('patient_id')->on('patients')->onDelete('cascade');
-            $table->bigInteger('doctor_id')->unsigned()->index()->nullable();
+            $table->bigInteger('doctor_id')->unsigned()->index();
             $table->foreign('doctor_id')->references('doctor_id')->on('doctors')->onDelete('cascade');
             $table->unsignedInteger('ratings')->nullable();
             $table->longText('reviews')->nullable();
-            $table->string('reviewed_by');
-            $table->string('status');
             $table->timestamps();
         });
     }
