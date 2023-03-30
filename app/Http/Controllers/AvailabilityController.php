@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Availability;
 use App\Http\Requests\UpdateAvailabilityRequest;
 use App\Http\Requests\StoreAvailabilityRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class AvailabilityController extends Controller
 {
@@ -29,7 +31,12 @@ class AvailabilityController extends Controller
 
     public function show($id)
     {
-        $availability = Availability::findOrFail($id);
+        $user = Auth::user();
+        if ($user->role == 'patient') {
+            $availability = Availability::where('doctor_id', $id);
+        } else {
+            $availability = Availability::findOrFail($id);            
+        }
 
         return response()->json($availability);
     }
