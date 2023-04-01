@@ -29,14 +29,14 @@ class AuthController extends Controller
         $patient->patient_id = $user->id;
 
         try {
-        $patient->save();
+            $patient->save();
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
             ], 500);
         }
-        
+
         return response()->json([
             'error' => false,
             'message' => 'User created successfully!',

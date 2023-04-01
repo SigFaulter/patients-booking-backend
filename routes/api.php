@@ -27,25 +27,27 @@ Route::middleware(['auth.role:admin,doctor,patient'])->group(function () {
     Route::apiResource('chat', ChatController::class)->only('index', 'store');
     Route::apiResource('users', UserController::class)->except('index')->middleware('auth.resource:user');
 });
-    
+
 Route::middleware(['auth.role:admin'])->group(function () {
     Route::apiResource('doctors', DoctorController::class);
     Route::apiResource('patients', PatientController::class);
     Route::apiResource('appointments', AppointmentController::class);
     Route::apiResource('availability', AvailabilityController::class);
 });
-    
+
 Route::middleware(['auth.role:doctor'])->group(function () {
     Route::apiResource('patients', PatientController::class)->only(['index', 'show']);
     Route::apiResource('doctors', DoctorController::class)->only('update', 'destroy')->middleware('auth.resource:doctor');
-    Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
-    Route::apiResource('availability', AvailabilityController::class);
+    Route::apiResource('availability', AvailabilityController::class)->only('store', 'update' ,'destroy');
+});
+
+Route::middleware(['auth.role:doctor,patient'])->group(function () {
+    Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
 });
 
 Route::middleware(['auth.role:patient'])->group(function () {
     Route::apiResource('patients', PatientController::class)->only('show', 'update', 'destroy')->middleware('auth.resource:patient');
-    Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::apiResource('appointments', AppointmentController::class)->only('show');
     Route::apiResource('appointments', AppointmentController::class)->only('store', 'update', 'destroy')->middleware('auth.resource:patient');
     Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
-});    
+});

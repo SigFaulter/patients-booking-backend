@@ -35,7 +35,7 @@ class AvailabilityController extends Controller
         if ($user->role == 'patient') {
             $availability = Availability::where('doctor_id', $id);
         } else {
-            $availability = Availability::findOrFail($id);            
+            $availability = Availability::findOrFail($id);   
         }
 
         return response()->json($availability);
