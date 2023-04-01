@@ -23,7 +23,7 @@ class StoreAvailabilityRequest extends BaseRequest
     {
         return [
             'doctor_id' => 'required|integer',
-            'date' => 'required|date_format:Y-m-d',
+            'available_date' => 'required|date_format:Y-m-d',
             'start_time' => 'required|date_format:H:i:s|unique:availability',
             'end_time' => 'required|date_format:H:i:s|after:start_time|unique:availability',
         ];
