@@ -26,6 +26,7 @@ class StorePatientRequest extends BaseRequest
             'phone_number' => 'required|string|max:10',
             'city' => 'required|string|max:50',
             'id_card' => 'required|string|max:50|unique:patients',
+            'birthday' => 'required|date'
         ];
     }
 }

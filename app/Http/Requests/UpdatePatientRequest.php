@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdatePatientRequest extends FormRequest
+class UpdatePatientRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +26,7 @@ class UpdatePatientRequest extends FormRequest
             'phone_number' => 'sometimes|string|max:10',
             'city' => 'sometimes|string|max:50',
             'id_card' => 'sometimes|string|max:50|unique:patients',
+            'birthday' => 'required|date'
         ];
     }
 }
