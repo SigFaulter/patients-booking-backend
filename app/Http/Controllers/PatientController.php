@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePatientRequest;
+use App\Http\Requests\UpdatePatientRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +56,7 @@ class PatientController extends Controller
         return response()->json($patient);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdatePatientRequest $request, $id)
     {
         $validated = $request->validated();
 
@@ -79,7 +80,7 @@ class PatientController extends Controller
     public function destroy($id)
     {
         $patient = Patient::findOrFail($id);
-        
+
         if (!$patient) {
             return response()->json([
                 'error' => true,
