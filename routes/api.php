@@ -48,6 +48,7 @@ Route::middleware(['auth.role:doctor'])->group(function () {
 });
 
 Route::middleware(['auth.role:patient'])->group(function () {
+    Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
     Route::apiResource('patients', PatientController::class)->only('index','show', 'update');
     Route::apiResource('appointments', AppointmentController::class)->only('store', 'update', 'destroy');
     Route::apiResource('availabilities', AvailabilityController::class)->only(['index', 'show']);
