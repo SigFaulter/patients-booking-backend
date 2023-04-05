@@ -32,7 +32,7 @@ Route::middleware(['auth.role:doctor,patients,admin'])->group(function () {
     Route::apiResource('users', PatientController::class)->only('index', 'show', 'update', 'destroy');
     Route::apiResource('patients', PatientController::class)->only('index', 'show');
     Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
-    Route::apiResource('chat', DoctorController::class)->only('index', 'store');
+    Route::apiResource('chat', ChatController::class)->only('index', 'store');
 });
 
 Route::middleware(['auth.role:patient,admin'])->group(function () {

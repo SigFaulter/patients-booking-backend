@@ -68,10 +68,8 @@ class PatientController extends Controller
             ], 404);
         }
 
-        $patient->update($validated);
-
         try {
-            $patient->save();
+            $patient->update($validated);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

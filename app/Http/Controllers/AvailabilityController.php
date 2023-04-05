@@ -35,7 +35,7 @@ class AvailabilityController extends Controller
         if ($user->role == 'patient') {
             $availability = Availability::where('doctor_id', $id);
         } else {
-            $availability = Availability::findOrFail($id);   
+            $availability = Availability::findOrFail($id);
         }
 
         return response()->json($availability);
@@ -46,7 +46,7 @@ class AvailabilityController extends Controller
         $validated = $request->validated();
 
         $availability = Availability::findOrFail($id);
-        
+
         if ($availability === null) {
             return response()->json([
                 'error' => true,
@@ -54,7 +54,14 @@ class AvailabilityController extends Controller
             ], 404);
         }
 
-        $availability->update($validated);
+        try {
+            $availability->update($validated);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json([
             'error' => false,
