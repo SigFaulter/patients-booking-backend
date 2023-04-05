@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\LoginUserRequest;
+use App\Models\Doctor;
 
 class AuthController extends Controller
 {
@@ -58,10 +59,17 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
+        if ($user->role == 'patient') {
+            $data = Patient::where('patient_id', $user->id)->firstOrFail();
+        } else if ($user->role == 'doctor') {
+            $data = Doctor::where('doctor_id', $user->id)->firstOrFail();
+        }
+
         return response()->json([
             'error' => false,
             'message' => 'Login successful!',
             'user' => $user,
+            $user->role => $data,
             'Authorization' => 'Bearer ' . $token
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,

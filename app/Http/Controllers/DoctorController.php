@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Doctor;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -16,7 +17,13 @@ class DoctorController extends Controller
 
     public function show($id)
     {
-        $doctor = Doctor::findOrFail($id);
+        $user = Auth::user();
+
+        if ($user->role === 'doctor') {
+            $doctor = Doctor::where('doctor_id', $id);
+        } else {
+            $doctor = Doctor::findOrFail($id);
+        }
 
         if (!$doctor) {
             return response()->json([
