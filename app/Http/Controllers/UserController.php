@@ -38,6 +38,32 @@ class UserController extends Controller
     // TODO handle image upload
     public function update(UpdateUserRequest $request, $id)
     {
+        function getBytesFromHexString($hexdata)
+        {
+        for($count = 0; $count < strlen($hexdata); $count+=2)
+            $bytes[] = chr(hexdec(substr($hexdata, $count, 2)));
+
+        return implode($bytes);
+        }
+
+        function getImageMimeType($imagedata)
+        {
+        $imagemimetypes = array(
+            "jpeg" => "FFD8",
+            "png" => "89504E470D0A1A0A",
+            "gif" => "474946",
+        );
+
+        foreach ($imagemimetypes as $mime => $hexbytes)
+        {
+            $bytes = getBytesFromHexString($hexbytes);
+            if (substr($imagedata, 0, strlen($bytes)) == $bytes)
+            return $mime;
+        }
+
+        return NULL;
+        }
+
         $validated = $request->validated();
 
         $user = User::findOrFail($id);
@@ -52,19 +78,19 @@ class UserController extends Controller
         $temp = Arr::except($validated, ['image']);
 
         $user->update($temp);
-        
+
         if ($request->has('image')) {
             $image = base64_decode($request->image);
-        
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-            $extension = pathinfo($validated['image_file_name'], PATHINFO_EXTENSION);
 
-            if (!in_array($extension, $allowedExtensions)) {
+            $mime = getImageMimeType($image);
+            $allowedExtensions = ['jpeg', 'png', 'gif'];
+
+            if (!in_array($mime, $allowedExtensions)) {
                 return response()->json(['error' => true, 'message' => 'Invalid file type'], 400);
             }
 
             // Generate a unique name for the file
-            $file_name = Str::random(40) . '.' . $request->image_name . $extension;
+            $file_name = Str::random(15) . ".$mime";
 
             // Move the uploaded file to the public directory
             Storage::disk('public')->put($file_name, $image);
@@ -92,7 +118,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $user = new User($validated);
-        
+
         try {
             $user->save();
         } catch (\Exception $e) {
@@ -104,7 +130,7 @@ class UserController extends Controller
 
     }
 
-    public function destroy($id)    
+    public function destroy($id)
     {
         // TODO delete related records in patients table
         //User::delete($id);

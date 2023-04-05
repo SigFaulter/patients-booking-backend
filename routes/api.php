@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\ChatController;
@@ -27,15 +28,16 @@ Route::middleware(['auth.role:patient'])->group(function () {
     Route::apiResource('availabilities', AvailabilityController::class)->only(['index', 'show']);
 });
 
-Route::middleware(['auth.role:doctor,patients,admin'])->group(function () {
+Route::middleware(['auth.role:doctor,patient,admin'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('users', PatientController::class)->only('index', 'show', 'update', 'destroy');
     Route::apiResource('patients', PatientController::class)->only('index', 'show');
     Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
     Route::apiResource('chat', ChatController::class)->only('index', 'store');
 });
 
 Route::middleware(['auth.role:patient,admin'])->group(function () {
+    Route::apiResource('users', UserController::class)->only('update');
+    Route::apiResource('users', UserController::class)->only('index', 'show', 'delete')->middleware('auth.resource:user');
     Route::apiResource('patients', PatientController::class)->only('update', 'destroy');
     Route::apiResource('appointments', AppointmentController::class)->only('index', 'store', 'update', 'destroy');
     Route::apiResource('availabilities', AvailabilityController::class)->only('index', 'show');
