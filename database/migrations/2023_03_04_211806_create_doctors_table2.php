@@ -19,6 +19,7 @@ return new class extends Migration
                 $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
                 $table->string('full_name');
                 $table->string('phone_number');
+                $table->string('image')->nullable();
                 $table->string('clinic_address')->nullable();
                 $table->string('city')->nullable();
                 $table->string('qualifications')->nullable();

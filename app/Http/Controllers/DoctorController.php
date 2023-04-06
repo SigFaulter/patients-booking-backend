@@ -6,6 +6,8 @@ use App\Http\Requests\RegisterDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DoctorController extends Controller
 {
@@ -62,15 +64,63 @@ class DoctorController extends Controller
 
     public function update(UpdateDoctorRequest $request, $id)
     {
+        function getBytesFromHexString($hexdata)
+        {
+        for($count = 0; $count < strlen($hexdata); $count+=2)
+            $bytes[] = chr(hexdec(substr($hexdata, $count, 2)));
+
+        return implode($bytes);
+        }
+
+        function getImageMimeType($imagedata)
+        {
+        $imagemimetypes = array(
+            "jpeg" => "FFD8",
+            "png" => "89504E470D0A1A0A",
+            "gif" => "474946",
+        );
+
+        foreach ($imagemimetypes as $mime => $hexbytes)
+        {
+            $bytes = getBytesFromHexString($hexbytes);
+            if (substr($imagedata, 0, strlen($bytes)) == $bytes)
+            return $mime;
+        }
+
+        return NULL;
+        }
+
         $validated = $request->validated();
 
         $doctor = Doctor::findOrFail($id);
+
 
         if (!$doctor) {
             return response()->json([
                 'error' => true,
                 'message' => 'Doctor not found',
             ], 404);
+        }
+
+
+        if ($request->has('image')) {
+            $image = base64_decode($request->image);
+
+            $mime = getImageMimeType($image);
+            $allowedExtensions = ['jpeg', 'png', 'gif'];
+
+            if (!in_array($mime, $allowedExtensions)) {
+                return response()->json(['error' => true, 'message' => 'Invalid file type'], 400);
+            }
+
+            // Generate a unique name for the file
+            $file_name = Str::random(15) . ".$mime";
+
+            // Move the uploaded file to the public directory
+            Storage::disk('public')->put($file_name, $image);
+
+            // Save the file name to the user's profile
+            $doctor['image'] = $file_name;
         }
 
         $doctor->full_name = $validated['full_name'];

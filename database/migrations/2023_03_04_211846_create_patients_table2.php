@@ -19,13 +19,14 @@ return new class extends Migration
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('full_name');
             $table->date('birthday')->nullable();
+            $table->string('image')->nullable();
             $table->string('id_card')->unique();
             $table->text('medical_history')->nullable();
             $table->string('phone_number')->nullable();
             $table->timestamps();
         });
     }
-    
+
 
     /**
      * Reverse the migrations.
