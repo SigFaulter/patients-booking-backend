@@ -24,7 +24,6 @@ class UpdatePatientRequest extends BaseRequest
         return [
             'full_name' => 'sometimes|string|min:3|max:50',
             'phone_number' => 'sometimes|string|max:10',
-            'city' => 'sometimes|string|max:50',
             'id_card' => 'sometimes|string|max:50|unique:patients',
             'birthday' => 'required|date'
         ];

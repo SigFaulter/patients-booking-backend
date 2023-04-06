@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\LoginUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Doctor;
 
 class AuthController extends Controller
@@ -75,6 +76,45 @@ class AuthController extends Controller
             'Authorization' => 'Bearer ' . $token,
             'Access-Control-Expose-Headers' => 'Authorization',
         ]);
+    }
+
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        $user = auth()->user();
+
+        if ($user->role === 'patient') {
+            $user = User::where('patient_id', $user->id)->where('id', $id);
+        } else {
+            $user = User::findOrFail($id);
+        }
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        $user->email = $validated->email;
+        $user->full_name = $validated->full_name;
+        $user->password = $validated->password;
+
+        try {
+            $user->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'error' => false,
+            'message' => 'User updated successfully',
+            'user' => $user
+        ], 200);
     }
 
     public function logout()
