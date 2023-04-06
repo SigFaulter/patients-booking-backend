@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
-use App\Models\User;
-
 use App\Http\Requests\UpdateUserRequest;
-
+use App\Models\User;
 
 class UserController extends Controller
 {

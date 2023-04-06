@@ -23,6 +23,7 @@ return new class extends Migration
                 $table->string('clinic_address')->nullable();
                 $table->string('city')->nullable();
                 $table->string('qualifications')->nullable();
+                $table->integer('price')->default(0);
                 $table->integer('patients_treated')->unsigned()->default(0);
                 $table->timestamps();
         });
