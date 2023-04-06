@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('availability', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('doctor_id');
-            $table->date('available_date');
+            $table->date('unavailable_date');
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();
