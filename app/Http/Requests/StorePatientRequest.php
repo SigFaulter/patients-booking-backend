@@ -24,6 +24,7 @@ class StorePatientRequest extends BaseRequest
         return [
             'full_name' => 'required|string|min:3|max:50',
             'phone_number' => 'required|string|max:10',
+            'city' => 'required|string|max:50',
             'id_card' => 'required|string|max:50|unique:patients',
             'birthday' => 'required|date'
         ];
