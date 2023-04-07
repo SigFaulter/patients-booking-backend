@@ -22,7 +22,7 @@ class DoctorController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'doctor') {
-            $doctor = Doctor::where('doctor_id', $id);
+            $doctor = Doctor::where('doctor_id', $id)->firstOrFail();
         } else {
             $doctor = Doctor::findOrFail($id);
         }

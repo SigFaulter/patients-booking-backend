@@ -12,7 +12,7 @@ class ChatController extends Controller
         $user = Auth::user();
 
         try {
-            $messages = Chat::where('sender_id', $user->id)
+            $messages = Chat::where('sender_id', $user->id)->firstOrFail()
             ->orWhere('receiver_id', $user->id)
             ->get();
         } catch (\Exception $e) {

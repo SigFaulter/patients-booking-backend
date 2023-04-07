@@ -33,7 +33,7 @@ class AvailabilityController extends Controller
     {
         $user = Auth::user();
         if ($user->role == 'patient') {
-            $availability = Availability::where('doctor_id', $id)->first();
+            $availability = Availability::where('doctor_id', $id)->firstOrFail();
         } else {
             $availability = Availability::findOrFail($id);
         }

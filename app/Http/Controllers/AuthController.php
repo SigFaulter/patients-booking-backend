@@ -85,7 +85,7 @@ class AuthController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'patient') {
-            $user = User::where('patient_id', $user->id)->where('id', $id);
+            $user = User::where('patient_id', $user->id)->where('id', $id)->firstOrFail();
         } else {
             $user = User::findOrFail($id);
         }

@@ -9,13 +9,13 @@ use App\Http\Requests\UpdateAppointmentRequest;
 class AppointmentController extends Controller
 {
     public function index()
-    {   
+    {
         $user = auth()->user();
-        
+
         if ($user->role === 'doctor') {
-            $appointments = Appointment::where('doctor_id', $user->id);
+            $appointments = Appointment::where('doctor_id', $user->id)->firstOrFail();
         } else if ($user->role === 'patient') {
-            $appointments = Appointment::where('patient_id', $user->id);
+            $appointments = Appointment::where('patient_id', $user->id)->firstOrFail();
         } else {
             $appointments = Appointment::all();
         }
@@ -35,7 +35,7 @@ class AppointmentController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'patient') {
-            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id);
+            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id)->firstOrFail();
         } else {
             $appointment = Appointment::findOrFail($id);
         }
@@ -113,8 +113,8 @@ class AppointmentController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'patient') {
-            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id);
+        if ($user->role == 'patient') {
+            $appointment = Appointment::where('patient_id', $user->id)->where('id', $id)->firstOrFail();
         } else {
             $appointment = Appointment::findOrFail($id);
         }

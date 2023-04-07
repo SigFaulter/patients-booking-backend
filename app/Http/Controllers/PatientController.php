@@ -15,7 +15,7 @@ class PatientController extends Controller
     {
         $user = Auth::user();
         if ($user->role === 'patient') {
-            $patients = Patient::where('patient_id', $user->id)->first();
+            $patients = Patient::where('patient_id', $user->id)->firstOrFail();
         } else {
             $patients = Patient::all();
         }
