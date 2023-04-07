@@ -25,7 +25,7 @@ class RegisterAppointmentRequest extends BaseRequest
         return [
             'doctor_id' => 'required|exists:doctors,id',
             'appointment_date' => 'required|date_format:Y-m-d',
-            'appointment_time' => 'required|date_format:H:i:s',
+            'appointment_time' => 'required|date_format:H:i',
         ];
     }
 
