@@ -26,7 +26,6 @@ class UpdateUserRequest extends BaseRequest
         return [
             'email' => 'sometimes|email|unique:users,email',
             'password' => 'sometimes|min:8|max:255',
-            'image' => 'sometimes|string',
         ];
     }
 

@@ -40,10 +40,10 @@ Route::middleware(['auth.role:patient,admin'])->group(function () {
     Route::apiResource('users', UserController::class)->only('index', 'show', 'delete')->middleware('auth.resource:user');
     Route::apiResource('patients', PatientController::class)->only('update', 'destroy');
     Route::apiResource('appointments', AppointmentController::class)->only('index', 'store', 'update', 'destroy');
-    Route::apiResource('availabilities', AvailabilityController::class)->only('index', 'show');
+    Route::apiResource('availability', AvailabilityController::class)->only('index', 'show');
 });
 
 Route::middleware(['auth.role:doctor,admin'])->group(function () {
     Route::apiResource('doctors', PatientController::class)->only('update', 'destroy');
-    Route::apiResource('availabilities', AvailabilityController::class)->only('index', 'store', 'update', 'destroy');
+    Route::apiResource('availability', AvailabilityController::class)->only('index', 'store', 'update', 'destroy');
 });
