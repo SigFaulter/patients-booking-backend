@@ -25,7 +25,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth.role:patient'])->group(function () {
     Route::apiResource('appointments', AppointmentController::class)->only('store', 'update', 'destroy');
-    Route::apiResource('availabilities', AvailabilityController::class)->only(['index', 'show']);
+    Route::apiResource('availability', AvailabilityController::class)->only(['index', 'show']);
 });
 
 Route::middleware(['auth.role:doctor,patient,admin'])->group(function () {
