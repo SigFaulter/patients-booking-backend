@@ -23,12 +23,18 @@ class AuthController extends Controller
             'password' => bcrypt($validated['password']),
         ]);
 
-        $user->save();
-
+        try {
+            $user->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
         $user = User::where('email', $validated['email'])->first();
 
         $patient = new Patient($validated);
-        $patient->patient_id = $user->id;
+        $patient->id = $user->id;
 
         try {
             $patient->save();
@@ -61,17 +67,16 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user->role == 'patient') {
-            $data = Patient::where('patient_id', $user->id)->firstOrFail();
+            $data = Patient::where('id', $user->id)->firstOrFail();
         } else if ($user->role == 'doctor') {
-            $data = Doctor::where('doctor_id', $user->id)->firstOrFail();
+            $data = Doctor::where('id', $user->id)->firstOrFail();
         }
 
-        if (!$user->role == 'admin') {
+        if ($user->role == 'admin') {
             return response()->json([
                 'error' => false,
                 'message' => 'Login successful!',
                 'user' => $user,
-                $user->role => $data,
                 'Authorization' => 'Bearer ' . $token
             ], 200)->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
@@ -83,6 +88,7 @@ class AuthController extends Controller
             'error' => false,
             'message' => 'Login successful!',
             'user' => $user,
+            $user->role => $data,
             'Authorization' => 'Bearer ' . $token
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,
@@ -97,7 +103,7 @@ class AuthController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'patient') {
-            $user = User::where('patient_id', $user->id)->where('id', $id)->firstOrFail();
+            $user = User::wherewhere('id', $id)->firstOrFail();
         } else {
             $user = User::findOrFail($id);
         }
