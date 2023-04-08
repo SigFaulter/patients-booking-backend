@@ -66,11 +66,23 @@ class AuthController extends Controller
             $data = Doctor::where('doctor_id', $user->id)->firstOrFail();
         }
 
+        if (!$user->role == 'admin') {
+            return response()->json([
+                'error' => false,
+                'message' => 'Login successful!',
+                'user' => $user,
+                $user->role => $data,
+                'Authorization' => 'Bearer ' . $token
+            ], 200)->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Access-Control-Expose-Headers' => 'Authorization',
+            ]);
+        }
+
         return response()->json([
             'error' => false,
             'message' => 'Login successful!',
             'user' => $user,
-            $user->role => $data,
             'Authorization' => 'Bearer ' . $token
         ], 200)->withHeaders([
             'Authorization' => 'Bearer ' . $token,

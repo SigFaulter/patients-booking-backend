@@ -7,13 +7,13 @@ use App\Models\Chat;
 
 class ChatController extends Controller
 {
-    public function index()
+    public function index($id)
     {
         $user = Auth::user();
 
         try {
             $messages = Chat::where('sender_id', $user->id)->firstOrFail()
-            ->orWhere('receiver_id', $user->id)
+            ->orWhere('receiver_id', $id)
             ->get();
         } catch (\Exception $e) {
             return response()->json([
