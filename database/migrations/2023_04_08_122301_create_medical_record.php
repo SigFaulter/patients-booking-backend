@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('medical_record', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('patient_id')->unsigned()->index()->nullable();
+            $table->foreign('patient_id')->references('patient_id')->on('patient')->onDelete('cascade');
             $table->string('record_path');
             $table->timestamps();
         });
