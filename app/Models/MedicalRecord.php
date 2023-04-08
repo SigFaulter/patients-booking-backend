@@ -12,5 +12,10 @@ class MedicalRecord extends Model
         'record_path',
         'patient_id'
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 }
 

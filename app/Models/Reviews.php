@@ -10,13 +10,17 @@ class Reviews extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'patient_id',
         'doctor_id',
-        'ratings',
+        'rating',
         'reviews',
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function doctor(){
+        return $this->belongsTo(Doctor::class);
     }
 }

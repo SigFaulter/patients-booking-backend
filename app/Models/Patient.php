@@ -10,22 +10,19 @@ class Patient extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'patient_id',
+        'id',
         'full_name',
         'phone_number',
         'id_card',
         'birthday',
         'medical_history',
+        'image',
     ];
 
     protected $dates = [
         'birthday',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
     public function appointments()
     {
