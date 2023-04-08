@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('patient_id')->unsigned()->index();
-            $table->foreign('patient_id')->references('patient_id')->on('patients')->onDelete('cascade');
-            $table->bigInteger('doctor_id')->unsigned()->index();
-            $table->foreign('doctor_id')->references('doctor_id')->on('doctors')->onDelete('cascade');
-            $table->unsignedInteger('ratings')->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('patient_id');
+            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('doctor_id');
+            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
+            $table->unsignedInteger('rating')->nullable();
             $table->longText('reviews')->nullable();
             $table->timestamps();
         });

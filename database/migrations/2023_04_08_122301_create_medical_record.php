@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('medical_record', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('patient_id')->unsigned()->index()->nullable();
-            $table->foreign('patient_id')->references('patient_id')->on('patient')->onDelete('cascade');
+        Schema::create('medical_records', function (Blueprint $table) {
+            $table->bigIncrements('patient_id');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->string('record_path');
             $table->timestamps();
         });
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medical_record');
+        Schema::dropIfExists('medical_records');
     }
 };
