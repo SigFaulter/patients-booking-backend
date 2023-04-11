@@ -3,24 +3,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chat extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'sender_id',
-        'receiver_id',
-        'message',
-    ];
+    protected $table = "chats";
+    protected $guarded = ['id'];
+    protected $fillable = ['user_id', 'created_by'];
 
-    public function sender()
+    public function participants(): HasMany
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->hasMany(ChatParticipant::class, 'chat_id');
     }
 
-    public function receiver()
+    public function messages(): HasMany {
+        return $this->hasMany(ChatMessage::class, 'chat_id');
+    }
+
+    public function lastMessage(): HasOne
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->hasOne(ChatMessage::class, 'chat_id')->latest('updated_at');
+    }
+
+    public function scopeHasParticipant($query, int $userId) {
+        return $query->whereHas('participants', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
     }
 }
