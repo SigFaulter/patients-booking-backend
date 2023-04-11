@@ -24,6 +24,10 @@ class StoreMedicalRecordRequest extends FormRequest
     public function rules()
     {
         return [
+            'medicine' => 'required|string',
+            'quantity' => 'required|int',
+            'days' => 'required|int',
+            'notes' => 'required|string',
         ];
     }
 }

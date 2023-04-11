@@ -16,7 +16,10 @@ return new class extends Migration
         Schema::create('medical_records', function (Blueprint $table) {
             $table->bigIncrements('patient_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->string('record_path');
+            $table->string('medicine');
+            $table->integer('quantity');
+            $table->integer('days');
+            $table->string('notes');
             $table->timestamps();
         });
     }

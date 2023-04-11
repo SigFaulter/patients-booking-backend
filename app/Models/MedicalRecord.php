@@ -9,7 +9,10 @@ class MedicalRecord extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'record_path',
+        'medicine',
+        'quantity',
+        'days',
+        'notes',
         'patient_id'
     ];
 

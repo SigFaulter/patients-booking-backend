@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMedicalRecordRequest;
 use App\Models\MedicalRecord;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePatientRequest;
 
 class MedicalRecordController extends Controller
 {
@@ -20,9 +21,18 @@ class MedicalRecordController extends Controller
         return response()->json($records);
     }
 
-    /*
-    public function store(Request) {
+    public function store(StoreMedicalRecordRequest $request) {
+        $validated = $request->validated();
 
+        $record = new MedicalRecord($validated);
+
+        try {
+            return $record->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
-    */
 }
