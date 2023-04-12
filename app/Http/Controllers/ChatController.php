@@ -23,15 +23,6 @@ class ChatController extends Controller
         $isPrivate = 1;
         if ($request->has('is_private')) {
             $isPrivate = (int)$data['is_private'];
-        try {
-            $messages = Chat::where('sender_id', $user->id)->firstOrFail()
-            ->orWhere('receiver_id', $id)
-            ->get();
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage(),
-            ], 500);
         }
 
         $chats = Chat::where('is_private', $isPrivate)
