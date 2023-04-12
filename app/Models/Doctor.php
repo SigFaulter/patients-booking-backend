@@ -10,17 +10,16 @@ class Doctor extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'full_name',
         'phone_number',
         'city',
         'qualifications',
         'patients_treated',
-        'rating' // TODO update this automaticall from users reviews
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'rating',
+        'image',
+        'clinic_address',
+        'price',
     ];
 }
 ?>

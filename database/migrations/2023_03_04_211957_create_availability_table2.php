@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up() {
         Schema::create('availability', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('doctor_id');
             $table->date('unavailable_date');
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();
 
-            $table->foreign('doctor_id')->references('doctor_id')->on('doctors');
+            $table->foreign('doctor_id')->references('id')->on('doctors');
         });
     }
 
