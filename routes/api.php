@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +35,8 @@ Route::middleware(['auth.role:doctor,patient,admin'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('patients', PatientController::class)->only('index', 'show');
     Route::apiResource('doctors', DoctorController::class)->only('index', 'show');
-    Route::apiResource('chat', ChatController::class)->only('index', 'store');
+    Route::apiResource('chats', ChatController::class)->only(['index', 'store', 'show']);
+    Route::apiResource('chat_messages', ChatMessageController::class)->only(['index','store']);
 });
 
 Route::middleware(['auth.role:patient,admin'])->group(function () {

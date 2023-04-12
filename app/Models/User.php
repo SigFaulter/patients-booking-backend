@@ -5,10 +5,12 @@ namespace App\Models;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\MessageSent;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -74,5 +76,18 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class, 'created_by');
+    }
+
+    public function routeNotificationForOneSignal() : array{
+        return ['tags'=>['key'=>'userId','relation'=>'=', 'value'=>(string)($this->id)]];
+    }
+
+    public function sendNewMessageNotification(array $data) : void {
+        $this->notify(new MessageSent($data));
     }
 }
